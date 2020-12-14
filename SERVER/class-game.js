@@ -13,6 +13,7 @@ exports.Game = class Game {
         this.timeUntilNextStatePacket = 0;
 
         this.objs = [];
+        this.players = [];
 
         this.server = server;
         this.update();
@@ -28,11 +29,24 @@ exports.Game = class Game {
 
         for(var i in this.objs){
             this.objs[i].update(this);
+
+            for(var j in this.objs){
+                if(this.objs[j] != this.objs[i]){
+                    this.resolveCollisions(this.objs[i], this.objs[j]);
+                }
+            }
         }
 
         if(player){
-            this.objs.length < 300; // approx number of food items
-            this.spawnObject(new Food());
+            if(this.objs.length < this.server.PlayerCount * 100); // approx number of food items
+            {
+                var i;
+                for (i = this.objs.length; i < this.server.PlayerCount * 100; i++)
+                {
+                    this.spawnObject(new Food());
+                    console.log("spawning food");
+                }
+            }
         }
 
         if (this.timeUntilNextStatePacket > 0)
@@ -41,7 +55,7 @@ exports.Game = class Game {
         }
         else
         {
-            this.timeUntilNextStatePacket = .1;
+            this.timeUntilNextStatePacket = .016;
             this.sendWorldState();
         }
 
@@ -86,11 +100,18 @@ exports.Game = class Game {
 
         this.objs.splice(index, 1);
 
-        const packet = Buffer.alloc(6);
+        const packet = Buffer.alloc(7);
         packet.write("REPL", 0);
         packet.writeUInt8(3, 4); // delete
-        packet.writeUInt8(netID, 5);
+        packet.writeUInt16BE(netID, 5);
 
         this.server.sendPacketToAll(packet);
+    }
+
+    resolveCollisions(obj1, obj2){
+        if(obj1.checkOverlap(obj2)){
+            this.removeObject(obj2);
+            console.log("remove object");
+        }
     }
 }

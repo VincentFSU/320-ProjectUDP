@@ -5,6 +5,7 @@ exports.Server = class Server {
     constructor(){
 
         this.clients = [];
+        this.PlayerCount = 0;
         this.timeUntilNextBroadcast = 5;
         this.port = 320; // server listens on 
         this.serverName = "Vince's server";
@@ -62,7 +63,8 @@ exports.Server = class Server {
         this.sendPacketToClient(packet, client); // TODO: needs ACK!!
 
         // depending on scene (and other conditions) spawn Pawn:
-        client.spawnPawn(this.game); 
+        client.spawnPawn(this.game);
+        this.PlayerCount++; 
 
         this.showClientList();
 
@@ -74,7 +76,11 @@ exports.Server = class Server {
         return client;
     }
     disconnectClient(client){
-        if(client.pawn) this.game.removeObject(client.pawn);
+        if(client.pawn)
+         {
+             this.game.removeObject(client.pawn);
+             this.PlayerCount--;
+         }
 
         const key = this.getKeyFromRinfo(client.rinfo);
         delete this.clients[key];
@@ -118,13 +124,14 @@ exports.Server = class Server {
         packet.write(this.serverName, 7);
         
         this.broadcastPacket(packet);
-        console.log("broadcast packet...")
+        //console.log("broadcast packet...")
     }
     update(game){
         // check clients for disconnects, etc.
         for(let key in this.clients){
             this.clients[key].update(game);
         }
+        //console.clear();
 
         this.timeUntilNextBroadcast -= game.dt;
         if(this.timeUntilNextBroadcast <= 0){

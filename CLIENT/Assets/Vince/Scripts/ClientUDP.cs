@@ -155,7 +155,7 @@ public class ClientUDP : MonoBehaviour
             {
                 case 1: // create:
                     if (packet.Length < offset + 5) return; // do nothing 
-                    networkID = packet.ReadUInt8(offset + 4);
+                    networkID = packet.ReadUInt16BE(offset + 4);
 
                     string classID = packet.ReadString(offset, 4);
 
@@ -175,7 +175,7 @@ public class ClientUDP : MonoBehaviour
                     break;
                 case 2: // update:
                     if (packet.Length < offset + 5) return; // do nothing 
-                    networkID = packet.ReadUInt8(offset + 4);
+                    networkID = packet.ReadUInt16BE(offset + 4);
 
                     // lookup the object, using networkID
                     NetworkObject obj2 = NetworkObject.GetObjectByNetworkID(networkID);
@@ -187,7 +187,7 @@ public class ClientUDP : MonoBehaviour
                     break;
                 case 3: // delete:
                     if (packet.Length < offset + 1) return; // do nothing 
-                    networkID = packet.ReadUInt8(offset);
+                    networkID = packet.ReadUInt16BE(offset);
 
                     NetworkObject obj3 = NetworkObject.GetObjectByNetworkID(networkID);
                     if (obj3 == null) return;

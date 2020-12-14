@@ -4,17 +4,17 @@ exports.AABB = class AABB{
 		this.height = height; 
 		//this.bounds ={xPos:x, yPos:y, bWidth:width, bHeight: height}  
         this.bounds = {
-                        xMin: x - width,
-                        xMax: x + width,
-                        yMin: y - height,
-                        yMax: y + height
+                        xMin: x - width/2,
+                        xMax: x + width/2,
+                        yMin: y - height/2,
+                        yMax: y + height/2
                      }; 
 	} 
 	updateBounds(x, y, width, height){ 
-		this.bounds.xMin = x - this.width; 
-		this.bounds.yMin = y - this.height; 
-		this.bounds.xMax = x + this.width; 
-		this.bounds.yMax = y + this.height; 
+		this.bounds.xMin = x - width/2; 
+		this.bounds.yMin = y - height/2; 
+		this.bounds.xMax = x + width/2; 
+		this.bounds.yMax = y + height/2; 
 	} 
 	compareBounds(a, b){ 
  

@@ -1,3 +1,5 @@
+const AABB = require("./class-AABB.js").AABB;
+
 exports.NetworkObject = class NetworkObject{
     static _idCount = 0;
     constructor(){
@@ -7,9 +9,29 @@ exports.NetworkObject = class NetworkObject{
         this.position = {x:0,y:0,z:0};
         this.rotation = {x:0,y:0,z:0};
         this.scale    = {x:1,y:1,z:1};
+        this.aabb = new AABB(this.position.x, this.position.y, this.scale.x, this.scale.y);
     }
     update(game){
-        this.position.x = Math.sin(game.time);
+        //this.position.x = Math.sin(game.time);
+    }
+    checkOverlap(other){
+        if(this.aabb.compareBounds(this.aabb.bounds, other.aabb.bounds)){
+            console.log("overlap");
+            console.log("A: " + "\n\txMin: " + this.aabb.bounds.xMin
+                              + "\n\txMax: " + this.aabb.bounds.xMax
+                              + "\n\tyMin: " + this.aabb.bounds.yMin
+                              + "\n\tyMax: " + this.aabb.bounds.yMax
+                      + "B: " + "\n\txMin: " + other.aabb.bounds.xMin
+                              + "\n\txMax: " + other.aabb.bounds.xMax
+                              + "\n\tyMin: " + other.aabb.bounds.yMin
+                              + "\n\tyMax: " + other.aabb.bounds.yMax);
+
+            this.scale.x += other.scale.x/5;
+            this.scale.y += other.scale.y/5;
+            this.scale.z += other.scale.z/5;
+
+            return true;
+        }
     }
     serialize(){
         const buffer = Buffer.alloc(38);

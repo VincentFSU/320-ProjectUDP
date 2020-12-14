@@ -27,6 +27,14 @@ exports.Client = class Client {
     }
     update(){
         const game = Game.Singleton;
+
+        // if(this.pawn){
+        //     console.log("A: " + "\n\txMin: " + this.pawn.aabb.bounds.xMin
+        //                       + "\n\txMax: " + this.pawn.aabb.bounds.xMax
+        //                       + "\n\tyMin: " + this.pawn.aabb.bounds.yMin
+        //                       + "\n\tyMax: " + this.pawn.aabb.bounds.yMax);                      
+        // }
+
         if(game.time > this.timeOfLastPacket + Client.TIMEOUT)
         {
             // send a "KICK" packet to client
@@ -50,10 +58,6 @@ exports.Client = class Client {
                 if(packet.length < 6) return;
                 this.input.axisH = packet.readInt8(4);
                 this.input.axisV = packet.readInt8(5);
-
-                console.log("INPT PACKET RECEIVED");
-                console.log("H:" + packet.readInt8(4));
-                console.log("V:" + packet.readInt8(5));
 
                 // send input to Pawn object:
                 if(this.pawn) this.pawn.input = this.input;                              

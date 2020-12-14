@@ -6,26 +6,26 @@ exports.Pawn = class Pawn extends NetworkObject{
         this.classID = "PAWN";
 
         this.velocity = {x:0,y:0,z:0};
-
+        this.aabb.updateBounds(this.position.x, this.position.y, this.scale.x, this.scale.y);
         this.input = {};
     }
     accelerate(vel, acc, dt){
         if(acc != 0)
         {
-            vel += acc * dt; // optionally multiply by a scalar;
+            vel += acc * dt * (1/this.scale.x); // optionally multiply by a scalar;
         }
         else
         {
             if(vel > 0)
             {
-                acc = -1;
-                vel += acc * dt; // optionally multiply by a scalar;
+                acc = -2;
+                vel += acc * dt * this.scale.x; // optionally multiply by a scalar;
                 if(vel < 0) vel = 0;
             }
             if(vel < 0)
             {
-                acc = 1;
-                vel += acc * dt; // optionally multiply by a scalar;
+                acc = 2;
+                vel += acc * dt * this.scale.x; // optionally multiply by a scalar;
                 if(vel > 0) vel = 0;
             }
         }
@@ -38,6 +38,10 @@ exports.Pawn = class Pawn extends NetworkObject{
         this.velocity.y = this.accelerate(this.velocity.y, moveY, game.dt);
         this.position.x += this.velocity.x * game.dt;
         this.position.y += this.velocity.y * game.dt;
+        this.aabb.updateBounds(this.position.x, this.position.y, this.scale.x, this.scale.y);
+    }
+    checkOverlap(other){
+        return super.checkOverlap(other);
     }
     serialize(){
         let b = super.serialize();

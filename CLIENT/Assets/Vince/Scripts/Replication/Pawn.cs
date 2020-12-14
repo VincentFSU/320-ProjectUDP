@@ -26,20 +26,20 @@ public class Pawn : NetworkObject
     {
         if (acc != 0)
         {
-            vel += acc * Time.fixedDeltaTime;
+            vel += acc * Time.fixedDeltaTime * (1/transform.localScale.x);
         }
         else
         {
             if (vel > 0)
             {
-                acc = -1;
-                vel += acc * Time.fixedDeltaTime; // optionally multiply by a scalar;
+                acc = -2;
+                vel += acc * Time.fixedDeltaTime * transform.localScale.x; // optionally multiply by a scalar;
                 if (vel < 0) vel = 0;
             }
             if (vel < 0)
             {
-                acc = 1;
-                vel += acc * Time.fixedDeltaTime; // optionally multiply by a scalar;
+                acc = 2;
+                vel += acc * Time.fixedDeltaTime * transform.localScale.x; // optionally multiply by a scalar;
                 if (vel > 0) vel = 0;
             }
         }

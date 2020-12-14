@@ -45,7 +45,6 @@ public class NetworkObject : MonoBehaviour
 
         float px = packet.ReadSingleBE(2);
         float py = packet.ReadSingleBE(6);
-        print(py);
         float pz = packet.ReadSingleBE(10);
 
         float rx = packet.ReadSingleBE(14);
@@ -60,6 +59,6 @@ public class NetworkObject : MonoBehaviour
         transform.rotation = Quaternion.Euler(rx, ry, rz);
         transform.localScale = new Vector3(sx, sy, sz);
 
-        return 37;
+        return 38;
     }
 }

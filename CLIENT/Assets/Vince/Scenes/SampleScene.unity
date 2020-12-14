@@ -757,6 +757,8 @@ MonoBehaviour:
   prefabs:
   - classID: PAWN
     prefab: {fileID: 6918529508840393227, guid: d992177b7a5ce824a9aefca5b8c5b66f, type: 3}
+  - classID: FOOD
+    prefab: {fileID: 2307360166024617440, guid: 5f776e2807a168b4c96f8cc081132d82, type: 3}
 --- !u!1 &1046859495
 GameObject:
   m_ObjectHideFlags: 0

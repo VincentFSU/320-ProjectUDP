@@ -5,39 +5,22 @@ exports.Food = class Food extends NetworkObject{
         super();
         this.classID = "FOOD";
 
-        this.position.x = Math.getRandomInt(40);
-        this.position.y = Math.getRandomInt(40);
+        this.position.x = this.getRandomInt(40);
+        this.position.y = this.getRandomInt(40);
 
         this.scale.x = 0.3;
         this.scale.y = 0.3;
         this.scale.z = 0.3;
 
+        this.aabb.updateBounds(this.position.x, this.position.y, this.scale.x, this.scale.y);
+
         this.input = {};
-    }
-    accelerate(vel, acc, dt){
-        if(acc != 0)
-        {
-            vel += acc * dt; // optionally multiply by a scalar;
-        }
-        else
-        {
-            if(vel > 0)
-            {
-                acc = -1;
-                vel += acc * dt; // optionally multiply by a scalar;
-                if(vel < 0) vel = 0;
-            }
-            if(vel < 0)
-            {
-                acc = 1;
-                vel += acc * dt; // optionally multiply by a scalar;
-                if(vel > 0) vel = 0;
-            }
-        }
-        return vel ? vel : 0;
     }
     update(game){
 
+    }
+    checkOverlap(other){
+        return false;
     }
     serialize(){
         let b = super.serialize();
@@ -46,5 +29,8 @@ exports.Food = class Food extends NetworkObject{
     }
     deserialize(){
         // TODO: turn object into a byte array
+    }
+    getRandomInt(max){
+        return Math.floor(Math.random() * Math.floor(max));
     }
 }
