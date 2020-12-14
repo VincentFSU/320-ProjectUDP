@@ -98,7 +98,7 @@ public class ClientUDP : MonoBehaviour
             case "PAWN":
                 if (packet.Length < 5) return;
 
-                byte networkID = packet.ReadUInt8(4);
+                ushort networkID = packet.ReadUInt16BE(4);
                 var obj = NetworkObject.GetObjectByNetworkID(networkID);
                 if (obj != null)
                 {

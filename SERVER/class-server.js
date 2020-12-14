@@ -68,9 +68,9 @@ exports.Server = class Server {
 
         this.showClientList();
 
-        const packet2 = Buffer.alloc(5);
+        const packet2 = Buffer.alloc(6);
         packet2.write("PAWN", 0);
-        packet2.writeUInt8(client.pawn.networkID, 4);
+        packet2.writeUInt16BE(client.pawn.networkID, 4);
         this.sendPacketToClient(packet2, client);
 
         return client;

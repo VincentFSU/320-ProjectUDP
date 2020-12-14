@@ -10,7 +10,7 @@ exports.Food = class Food extends NetworkObject{
 
         this.scale.x = 0.3;
         this.scale.y = 0.3;
-        this.scale.z = 0.3;
+        this.scale.z = 1;
 
         this.aabb.updateBounds(this.position.x, this.position.y, this.scale.x, this.scale.y);
 

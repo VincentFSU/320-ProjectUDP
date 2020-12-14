@@ -6,6 +6,8 @@ public class Pawn : NetworkObject
 {
     new public static string classID = "PAWN"; // override parent value
 
+    private Camera cam;
+
     public bool canPlayerControl = false;
     Vector3 velocity = new Vector3();
 
@@ -19,6 +21,8 @@ public class Pawn : NetworkObject
             velocity.y = Accelerate(velocity.y, moveY);
 
             transform.position += new Vector3(velocity.x, velocity.y, 0) * Time.fixedDeltaTime;
+            cam.transform.position =  new Vector3(transform.position.x, transform.position.y, (float)(transform.position.x - 1.5 * transform.localScale.z));
+            cam.orthographicSize += scaleDiff;
         }
     }
 
@@ -44,6 +48,11 @@ public class Pawn : NetworkObject
             }
         }
         return vel;
+    }
+
+    private void Awake()
+    {
+        cam = Camera.main;
     }
 
     public override void Serialize()

@@ -7,6 +7,10 @@ public class NetworkObject : MonoBehaviour
     public int networkID;
     public static string classID = "NWOB";
 
+    [HideInInspector]
+    public float scaleDiff = 0f;
+
+
     private static Dictionary<int, NetworkObject> currentObjects = new Dictionary<int, NetworkObject>();
 
     static public void AddObject(NetworkObject obj)
@@ -54,6 +58,8 @@ public class NetworkObject : MonoBehaviour
         float sx = packet.ReadSingleBE(26);
         float sy = packet.ReadSingleBE(30);
         float sz = packet.ReadSingleBE(34);
+
+        scaleDiff = sx - transform.localScale.x;
 
         transform.position = new Vector3(px, py, pz);
         transform.rotation = Quaternion.Euler(rx, ry, rz);

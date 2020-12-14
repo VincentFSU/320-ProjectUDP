@@ -28,7 +28,7 @@ exports.NetworkObject = class NetworkObject{
 
             this.scale.x += other.scale.x/5;
             this.scale.y += other.scale.y/5;
-            this.scale.z += other.scale.z/5;
+            //this.scale.z += other.scale.z/5;
 
             return true;
         }
