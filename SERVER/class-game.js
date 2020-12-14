@@ -29,12 +29,16 @@ exports.Game = class Game {
 
         for(var i in this.objs){
             this.objs[i].update(this);
+        }
 
-            for(var j in this.objs){
-                if(this.objs[j] != this.objs[i]){
-                    this.resolveCollisions(this.objs[i], this.objs[j]);
-                }
-            }
+        for(var key in this.server.clients){
+            if(this.server.clients[key].pawn){
+                for(var other in this.objs){
+                    if(this.server.clients[key].pawn != this.objs[other]){
+                        this.resolveCollisions(this.server.clients[key].pawn, this.objs[other]);
+                    }
+                }                
+            };            
         }
 
         if(player){
