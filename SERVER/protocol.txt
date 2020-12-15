@@ -39,6 +39,12 @@ NAME - Sent when the user changes their name.
     4   1   uint8       name length
     5   ?   ascii       username
 
+DCON - Sent when the user disconnects, sets their ready status to false.
+
+    O   L   Datatype    Desc 
+    ========================
+    0   4   ascii       DCON
+
 Packets from Server
 ===================
 

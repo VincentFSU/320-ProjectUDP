@@ -67,6 +67,9 @@ exports.Client = class Client {
             case("REDY"):
                 this.ready = true;
                 break;
+            case("DCON"):
+                this.ready = false;
+                break;
             default:
                 console.log("ERROR: packet type not recognized");
         }

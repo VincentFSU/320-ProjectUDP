@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
 using System;
+using System.Threading;
 
 public class ClientUDP : MonoBehaviour
 {
@@ -145,7 +146,7 @@ public class ClientUDP : MonoBehaviour
                 {
                     chatController.gameObject.SetActive(false);
                 }
-                PawnScores.singleton.gameObject.SetActive(true);
+                //PawnScores.singleton.gameObject.SetActive(true);
                 break;
         }
     }
@@ -154,6 +155,19 @@ public class ClientUDP : MonoBehaviour
     {
         ready = true;
         SendPacket(PacketBuilder.Ready());
+    }
+
+    public void Disconnect()
+    {
+        ready = false;
+        SendPacket(PacketBuilder.Disconnect());
+        //Thread.Sleep(TimeSpan.FromMilliseconds(200));
+        //if (sockSending != null) sockSending.Close();
+        //if (sockReceiving != null) sockReceiving.Close();
+
+        chatController.gameObject.SetActive(false);
+        connectGUI.gameObject.SetActive(true);
+        PawnScores.singleton.ClearList();
     }
 
     private void AddToServerList(RemoteServer server)
@@ -209,9 +223,17 @@ public class ClientUDP : MonoBehaviour
                     if (packet.Length < offset + 5) return; // do nothing 
                     networkID = packet.ReadUInt16BE(offset + 4);
 
+                    //PawnScores.singleton.ClearList();
+
                     // lookup the object, using networkID
                     NetworkObject obj2 = NetworkObject.GetObjectByNetworkID(networkID);
                     if (obj2 == null) return;
+
+                    classID = packet.ReadString(offset, 4);
+                    if (classID == "PAWN")
+                    {
+                        PawnScores.singleton.AddPawn((Pawn)obj2);
+                    }
 
                     offset += 4;
                     offset += obj2.Deserialize(packet.Slice(offset));

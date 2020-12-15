@@ -24,7 +24,11 @@ public class PawnScores : MonoBehaviour
 
     void DrawLeaderboard()
     {
+        pawns.Remove(1);
         List<Pawn> pawnList = pawns.OrderByDescending(p => p.Value.score).Select(p => p.Value).ToList();
+        //List<Pawn> pawnList = pawns.Values.ToList();
+        //pawnList = pawnList.OrderByDescending(p => p.score).ToList();
+        //print(pawnList.Count);
         if (pawnList.Count != 0)
         {
             scoreImg.gameObject.SetActive(true);
@@ -41,6 +45,7 @@ public class PawnScores : MonoBehaviour
         foreach (var pawn in pawnList)
         {
             text += $"{++i}. {pawn.username}\n";
+            //print($"Name: {pawn.username} NetID: {pawn.networkID}");
 
             if (pawn.canPlayerControl)
             {
@@ -65,6 +70,11 @@ public class PawnScores : MonoBehaviour
         {
             pawns.Remove(networkID);
         }
+    }
+
+    public void ClearList()
+    {
+        pawns.Clear();
     }
 
 

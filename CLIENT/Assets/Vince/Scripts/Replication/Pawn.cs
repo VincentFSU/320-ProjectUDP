@@ -94,4 +94,11 @@ public class Pawn : NetworkObject
         score = (int)(transform.localScale.x * 100) - 100;
         return base.Deserialize(packet) + usernameLength + 1;
     }
+
+    private void OnDestroy()
+    {
+        Destroy(sign.gameObject);
+        Destroy(usernameText.gameObject);
+        Destroy(gameObject);
+    }
 }

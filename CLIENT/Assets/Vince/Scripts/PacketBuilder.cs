@@ -29,9 +29,17 @@ public static class PacketBuilder
 
     public static Buffer Ready()
     {
-        Buffer packet = Buffer.Alloc(5);
+        Buffer packet = Buffer.Alloc(4);
         packet.WriteString("REDY", 0);
 
+        return packet;
+    }
+
+    public static Buffer Disconnect()
+    {
+        Buffer packet = Buffer.Alloc(4);
+        packet.WriteString("DCON", 0);
+        
         return packet;
     }
 
