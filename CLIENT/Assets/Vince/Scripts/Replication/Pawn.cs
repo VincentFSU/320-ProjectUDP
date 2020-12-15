@@ -12,9 +12,16 @@ public class Pawn : NetworkObject
     public bool canPlayerControl = false;
     Vector3 velocity = new Vector3();
 
+
     TextMeshPro usernameText;
     GameObject sign;
-    private string username;
+
+    [HideInInspector]
+    public string username;
+
+    public int score;
+
+    public PawnScores scoreBoard;
 
     private void FixedUpdate()
     {
@@ -68,6 +75,8 @@ public class Pawn : NetworkObject
         usernameText.color = UnityEngine.Color.black;
         usernameText.alignment = TextAlignmentOptions.Center;
         usernameText.fontSize = transform.localScale.x;
+
+        PawnScores.singleton.AddPawn(this);
     }
 
     public override void Serialize()
@@ -82,6 +91,7 @@ public class Pawn : NetworkObject
         usernameText.text = username;
         sign.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         usernameText.fontSize = transform.localScale.x;
+        score = (int)(transform.localScale.x * 10);
         return base.Deserialize(packet) + usernameLength + 1;
     }
 }
