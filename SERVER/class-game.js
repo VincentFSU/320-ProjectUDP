@@ -48,7 +48,7 @@ exports.Game = class Game {
                 for (i = this.objs.length; i < this.server.PlayerCount * 200; i++)
                 {
                     this.spawnObject(new Food());
-                    console.log("spawning food");
+                    //console.log("spawning food");
                 }
             }
         }
@@ -115,7 +115,7 @@ exports.Game = class Game {
     resolveCollisions(obj1, obj2){
         if(obj1.checkOverlap(obj2)){
             this.removeObject(obj2);
-            console.log("remove object");
+            //console.log("remove object");
         }
     }
 }
