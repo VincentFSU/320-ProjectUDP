@@ -25,6 +25,7 @@ public class ClientUDP : MonoBehaviour
     public int controlledPawnNetID = -1;
 
     private bool ready = false;
+    Camera cam;
 
     /// <summary> 
     /// Most recent ball update packet 
@@ -43,6 +44,7 @@ public class ClientUDP : MonoBehaviour
         }
         else
         {
+            cam = Camera.main;
             singleton = this;
             DontDestroyOnLoad(gameObject);
             ListenForPackets();
@@ -116,6 +118,7 @@ public class ClientUDP : MonoBehaviour
                     Pawn p = (Pawn)obj;
 
                     if (p != null) p.canPlayerControl = true;
+                    cam.orthographicSize = 6;
                 }
 
                 break;
@@ -235,6 +238,11 @@ public class ClientUDP : MonoBehaviour
                         PawnScores.singleton.AddPawn((Pawn)obj2);
                     }
 
+                    if (controlledPawnNetID == -1)
+                    {
+                        cam.orthographicSize = 51;
+                    }
+
                     offset += 4;
                     offset += obj2.Deserialize(packet.Slice(offset));
 
@@ -242,11 +250,24 @@ public class ClientUDP : MonoBehaviour
                 case 3: // delete:
                     if (packet.Length < offset + 1) return; // do nothing 
                     networkID = packet.ReadUInt16BE(offset);
-                    if (networkID == controlledPawnNetID) chatController.gameObject.SetActive(true);
+                    if (networkID == controlledPawnNetID)
+                    {
+                        chatController.gameObject.SetActive(true);
+                        cam.orthographicSize = 51;
+                    }
+
                     NetworkObject obj3 = NetworkObject.GetObjectByNetworkID(networkID);
                     if (obj3 == null) return;
 
-                    PawnScores.singleton.RemovePawn(networkID);
+                    if (networkID == 1)
+                    {
+                        PawnScores.singleton.ClearList();
+                    }
+                    else
+                    {
+
+                        PawnScores.singleton.RemovePawn(networkID);
+                    }
                     NetworkObject.RemoveObject(networkID);
                     Destroy(obj3.gameObject);
                     offset++;

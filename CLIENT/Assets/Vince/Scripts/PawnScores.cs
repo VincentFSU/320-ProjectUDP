@@ -24,8 +24,12 @@ public class PawnScores : MonoBehaviour
 
     void DrawLeaderboard()
     {
-        pawns.Remove(1);
         List<Pawn> pawnList = pawns.OrderByDescending(p => p.Value.score).Select(p => p.Value).ToList();
+
+        if (pawns.ContainsKey(1))
+        {
+            pawnList.Remove(pawns[1]);
+        }
         //List<Pawn> pawnList = pawns.Values.ToList();
         //pawnList = pawnList.OrderByDescending(p => p.score).ToList();
         //print(pawnList.Count);
