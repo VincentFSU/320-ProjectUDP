@@ -12,10 +12,10 @@ exports.Client = class Client {
             axisH:0,
             axisV:0,
         };
-
         this.pawn = null;
         this.timeOfLastPacket = Game.Singleton.time; // in seconds
         this.username = "Player";
+        this.ready = false;
     }
     spawnPawn(){
         const game = Game.Singleton;
@@ -28,13 +28,6 @@ exports.Client = class Client {
     }
     update(){
         const game = Game.Singleton;
-
-        // if(this.pawn){
-        //     console.log("A: " + "\n\txMin: " + this.pawn.aabb.bounds.xMin
-        //                       + "\n\txMax: " + this.pawn.aabb.bounds.xMax
-        //                       + "\n\tyMin: " + this.pawn.aabb.bounds.yMin
-        //                       + "\n\tyMax: " + this.pawn.aabb.bounds.yMax);                      
-        // }
 
         if(game.time > this.timeOfLastPacket + Client.TIMEOUT)
         {
@@ -70,6 +63,9 @@ exports.Client = class Client {
             case("CHAT"):
                 game.server.sendChat(packet, this);
                 console.log("chat packet received.");
+                break;
+            case("REDY"):
+                this.ready = true;
                 break;
             default:
                 console.log("ERROR: packet type not recognized");

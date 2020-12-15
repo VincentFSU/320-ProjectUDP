@@ -7,6 +7,8 @@ exports.Pawn = class Pawn extends NetworkObject{
 
         this.velocity = {x:0,y:0,z:0};
         this.aabb.updateBounds(this.position.x, this.position.y, this.scale.x, this.scale.y);
+        this.position.x = this.getRandomInt(10);
+        this.position.y = this.getRandomInt(10);
         this.input = {};
     }
     accelerate(vel, acc, dt){
@@ -30,6 +32,9 @@ exports.Pawn = class Pawn extends NetworkObject{
             }
         }
         return vel ? vel : 0;
+    }
+    getRandomInt(max){
+        return Math.floor(Math.random() * Math.floor(max));
     }
     update(game){
         let moveX = this.input.axisH|0; // -1 , 0, or 1

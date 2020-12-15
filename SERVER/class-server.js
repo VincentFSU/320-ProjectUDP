@@ -9,6 +9,7 @@ exports.Server = class Server {
         this.timeUntilNextBroadcast = 5;
         this.port = 320; // server listens on 
         this.serverName = "Vince's server";
+        this.readyPlayers = 0;
 
         // create socket:
         this.sock = require("dgram").createSocket("udp4");
@@ -62,16 +63,9 @@ exports.Server = class Server {
         const packet = this.game.makeREPL(false);
         this.sendPacketToClient(packet, client); // TODO: needs ACK!!
 
-        // depending on scene (and other conditions) spawn Pawn:
-        client.spawnPawn(this.game);
-        this.PlayerCount++; 
-
         this.showClientList();
-
-        const packet2 = Buffer.alloc(6);
-        packet2.write("PAWN", 0);
-        packet2.writeUInt16BE(client.pawn.networkID, 4);
-        this.sendPacketToClient(packet2, client);
+        // depending on scene (and other conditions) spawn Pawn:
+        
 
         return client;
     }
@@ -141,8 +135,29 @@ exports.Server = class Server {
     }
     update(game){
         // check clients for disconnects, etc.
+
+        // TODO: refactor this nightmare
         for(let key in this.clients){
             this.clients[key].update(game);
+            if(this.clients[key].ready){
+                this.readyPlayers++;
+                if(this.readyPlayers >= 1){
+                    const packet = Buffer.alloc(4);
+                    packet.write("STRT");
+                    this.sendPacketToAll(packet);
+                    for(let key in this.clients){
+                        this.clients[key].update(game);
+                        if(this.clients[key].ready && !this.clients[key].pawn){
+                            this.clients[key].spawnPawn(this.game);
+                            this.PlayerCount++; 
+                            const packet = Buffer.alloc(6);
+                            packet.write("PAWN", 0);
+                            packet.writeUInt16BE(this.clients[key].pawn.networkID, 4);
+                            this.sendPacketToClient(packet, this.clients[key]);
+                        }
+                    }
+                }
+            }
         }
         //console.clear();
 

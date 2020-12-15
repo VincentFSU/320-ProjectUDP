@@ -29,7 +29,7 @@ public class ClientUDP : MonoBehaviour
 
     void Start()
     {
-
+        chatController.gameObject.SetActive(false);
         if (singleton != null)
         {
             // already have a clientUDP... 
@@ -139,6 +139,11 @@ public class ClientUDP : MonoBehaviour
                 chatController.gameObject.SetActive(false);
                 break;
         }
+    }
+
+    public void Ready()
+    {
+        SendPacket(PacketBuilder.Ready());
     }
 
     private void AddToServerList(RemoteServer server)
