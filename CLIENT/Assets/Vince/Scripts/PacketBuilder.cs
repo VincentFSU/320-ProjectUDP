@@ -26,4 +26,32 @@ public static class PacketBuilder
 
         return b;
     }
+
+    public static Buffer Ready()
+    {
+        Buffer packet = Buffer.Alloc(5);
+        packet.WriteString("REDY", 0);
+
+        return packet;
+    }
+
+    public static Buffer Chat(string msg)
+    {
+        Buffer packet = Buffer.Alloc(6 + msg.Length);
+        packet.WriteString("CHAT", 0);
+        packet.WriteUInt16BE((ushort)msg.Length, 4);
+        packet.WriteString(msg, 6);
+
+        return packet;
+    }
+
+    public static Buffer SetName(string name)
+    {
+        Buffer packet = Buffer.Alloc(5 + name.Length);
+        packet.WriteString("NAME", 0);
+        packet.WriteUInt8((byte)name.Length, 4);
+        packet.WriteString(name, 5);
+
+        return packet;
+    }
 }

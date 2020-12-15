@@ -17,6 +17,28 @@ INPT - Current state of the client's input from the player.
     4   1   int8        hDir
     5   1   int8        vDir
 
+CHAT - Sent when the user sends a chat message.
+
+    O   L   Datatype    Desc
+    ========================
+    0   4   ascii       CHAT
+    4   2   uint16      message length
+    6   ?   ascii       message
+
+REDY - Sent when the user readys up.
+
+    O   L   Datatype    Desc
+    ========================
+    0   4   ascii       REDY
+
+NAME - Sent when the user changes their name.
+
+    O   L   Datatype    Desc
+    ========================
+    0   4   ascii       NAME
+    4   1   uint8       name length
+    5   ?   ascii       username
+
 Packets from Server
 ===================
 
@@ -35,7 +57,7 @@ PAWN - Sent to client to indicate which pawn they control
     O   L   Datatype    Desc
     ========================
     0   4   ascii       PAWN
-    4   1   uint8       NetID
+    4   2   uint16      NetID
 
 HOST - Periodically sent over networks to broadcast server IP and Protocol
 
@@ -43,5 +65,21 @@ HOST - Periodically sent over networks to broadcast server IP and Protocol
     ========================
     0   4   ascii       HOST
     4   2   uint16      Port (server)
-    6  1    uint8       Length of server name
-    7  ?    ascii       name of server
+    6   1   uint8       Length of server name
+    7   ?   ascii       name of server
+
+CHAT - Sent to all clients when a new chat message is received
+
+    O   L   Datatype    Desc
+    ========================
+    0   4   ascii       CHAT
+    4   1   uint8       username length 
+    5   2   uint16      message length
+    7   ?   ascii       username
+    ?   ?   ascii       message
+
+STRT - Sent when enough players are ready to begin the game.
+
+    O   L   Datatype    Desc
+    ========================
+    0   4   ascii       STRT

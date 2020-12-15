@@ -18,6 +18,8 @@ public class ClientUDP : MonoBehaviour
     static UdpClient sockReceiving = new UdpClient(321);
 
     public List<RemoteServer> availableGameServers = new List<RemoteServer>();
+    public ConnectGUI connectGUI;
+    public ChatController chatController;
 
     /// <summary> 
     /// Most recent ball update packet 
@@ -49,6 +51,9 @@ public class ClientUDP : MonoBehaviour
         IPEndPoint ep = new IPEndPoint(IPAddress.Parse(host), port);
         sockSending = new UdpClient(ep.AddressFamily);
         sockSending.Connect(ep);
+
+        connectGUI.gameObject.SetActive(false);
+        chatController.gameObject.SetActive(true);
 
         //ObjectRegistry.RegisterAll();
 
@@ -120,6 +125,18 @@ public class ClientUDP : MonoBehaviour
 
                 AddToServerList(new RemoteServer(res.RemoteEndPoint, name));
 
+                break;
+            case "CHAT":
+                if (packet.Length < 6) return;
+                int usernameLength = packet.ReadUInt8(4);
+                ushort messageLength = packet.ReadUInt16BE(5);
+                string username = packet.ReadString(7, usernameLength);
+                string message = packet.ReadString(7 + usernameLength, messageLength);
+                chatController.AddMessageToChatDisplay($"{username}: {message}");
+                print(message);
+                break;
+            case "STRT":
+                chatController.gameObject.SetActive(false);
                 break;
         }
     }

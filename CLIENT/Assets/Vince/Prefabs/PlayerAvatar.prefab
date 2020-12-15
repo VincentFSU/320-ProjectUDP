@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3837610693003696430}
   - component: {fileID: 3837610693003696429}
   - component: {fileID: 6918529508840393227}
+  - component: {fileID: 67572835296436476}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Untagged
@@ -109,4 +110,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkID: 0
+  scaleDiff: 0
   canPlayerControl: 0
+--- !u!114 &67572835296436476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3837610693003696428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14fd658e9647894aa6efc940b020519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Mats:
+  - {fileID: 2100000, guid: e279cb38085cab34ba4700c0f417d5e7, type: 2}
+  - {fileID: 2100000, guid: 0cdd32912053cea48a85884f687dea38, type: 2}
+  - {fileID: 2100000, guid: 6128acd6a3a4f2d468a5c525dfd7133a, type: 2}
+  - {fileID: 2100000, guid: 294e796abc4941845b0be91179b74b7d, type: 2}
+  - {fileID: 2100000, guid: e60dbfe113469a048ab964c5fbcfeaf5, type: 2}
+  - {fileID: 2100000, guid: de991dd1df6b43f49ad8e145dd20ae50, type: 2}

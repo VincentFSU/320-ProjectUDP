@@ -101,6 +101,19 @@ exports.Server = class Server {
             i++;
         }
     }
+    sendChat(msg, client){
+        const msgLength = msg.readUInt16BE(4);
+        const message = msg.slice(6, 6+msgLength).toString();
+        console.log(message);
+		const packet = Buffer.alloc(7 + msgLength + client.username.length)
+		packet.write("CHAT", 0);
+		packet.writeUInt8(client.username.length, 4);
+		packet.writeUInt16BE(msgLength, 5);
+		packet.write(client.username, 7);
+		packet.write(message, 7 + client.username.length);
+
+		this.sendPacketToAll(packet)
+    }
     sendPacketToAll(packet){
         for(var key in this.clients){
             this.sendPacketToClient(packet, this.clients[key]);

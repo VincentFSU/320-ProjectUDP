@@ -15,6 +15,7 @@ exports.Client = class Client {
 
         this.pawn = null;
         this.timeOfLastPacket = Game.Singleton.time; // in seconds
+        this.username = "Player";
     }
     spawnPawn(){
         const game = Game.Singleton;
@@ -61,6 +62,14 @@ exports.Client = class Client {
 
                 // send input to Pawn object:
                 if(this.pawn) this.pawn.input = this.input;                              
+                break;
+            case "NAME":
+                const nameLength = packet.readInt8(4);
+                this.username = packet.slice(5, 5+nameLength).toString();
+                break;
+            case("CHAT"):
+                game.server.sendChat(packet, this);
+                console.log("chat packet received.");
                 break;
             default:
                 console.log("ERROR: packet type not recognized");
