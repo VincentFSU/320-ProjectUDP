@@ -20,9 +20,8 @@ public class ClientUDP : MonoBehaviour
     public List<RemoteServer> availableGameServers = new List<RemoteServer>();
     public ConnectGUI connectGUI;
     public ChatController chatController;
-    public PawnScores leaderBoard;
 
-    private int controlledPawnNetID = -1;
+    public int controlledPawnNetID = -1;
 
     private bool ready = false;
 
@@ -146,6 +145,7 @@ public class ClientUDP : MonoBehaviour
                 {
                     chatController.gameObject.SetActive(false);
                 }
+                PawnScores.singleton.gameObject.SetActive(true);
                 break;
         }
     }
@@ -224,7 +224,7 @@ public class ClientUDP : MonoBehaviour
                     NetworkObject obj3 = NetworkObject.GetObjectByNetworkID(networkID);
                     if (obj3 == null) return;
 
-                    leaderBoard.RemovePawn(networkID);
+                    PawnScores.singleton.RemovePawn(networkID);
                     NetworkObject.RemoveObject(networkID);
                     Destroy(obj3.gameObject);
                     offset++;

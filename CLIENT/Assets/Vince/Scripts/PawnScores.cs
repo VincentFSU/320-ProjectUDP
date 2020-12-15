@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PawnScores : MonoBehaviour
 {
     public TextMeshProUGUI leaderboardText;
     public TextMeshProUGUI scoreText;
+
+    public Image leaderboardImg;
+    public Image scoreImg;
+
     Dictionary<int, Pawn> pawns = new Dictionary<int, Pawn>();
 
     private static PawnScores _singleton;
@@ -20,11 +25,27 @@ public class PawnScores : MonoBehaviour
     void DrawLeaderboard()
     {
         List<Pawn> pawnList = pawns.OrderByDescending(p => p.Value.score).Select(p => p.Value).ToList();
+        if (pawnList.Count != 0)
+        {
+            scoreImg.gameObject.SetActive(true);
+            leaderboardImg.gameObject.SetActive(true);
+        }
+        else
+        {
+            scoreImg.gameObject.SetActive(false);
+            scoreImg.gameObject.SetActive(false);
+            return;
+        }
         string text = "";
         int i = 0;
         foreach (var pawn in pawnList)
         {
             text += $"{++i}. {pawn.username}\n";
+
+            if (pawn.canPlayerControl)
+            {
+                scoreText.text = $"Score: {pawn.score}";
+            }
         }
 
         leaderboardText.text = text;
@@ -50,23 +71,13 @@ public class PawnScores : MonoBehaviour
     private void Update()
     {
         DrawLeaderboard();
-        var playerScore = pawns.Where(p => p.Value.canPlayerControl).Select(p => p.Value.score).FirstOrDefault();
-        scoreText.text = $"Score: {playerScore}";
     }
 
     void Start()
     {
-        if (singleton != null)
-        {
-            // already have a PawnScores... 
-            Destroy(gameObject);
-
-        }
-        else
-        {
-            singleton = this;
-        }
-
+        leaderboardImg.gameObject.SetActive(false);
+        scoreImg.gameObject.SetActive(false);
+        singleton = this;
     }
 
 
