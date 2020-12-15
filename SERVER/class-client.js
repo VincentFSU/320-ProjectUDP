@@ -21,7 +21,7 @@ exports.Client = class Client {
         const game = Game.Singleton;
         if (this.pawn) return; // if pawn exists, do nothing.
 
-        this.pawn = new Pawn();
+        this.pawn = new Pawn(this.username);
         game.spawnObject(this.pawn);
 
 

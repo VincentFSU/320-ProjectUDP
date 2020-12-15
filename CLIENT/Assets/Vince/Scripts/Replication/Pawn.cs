@@ -90,8 +90,8 @@ public class Pawn : NetworkObject
         username = packet.ReadString(39, usernameLength);
         usernameText.text = username;
         sign.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-        usernameText.fontSize = transform.localScale.x;
-        score = (int)(transform.localScale.x * 10);
+        usernameText.fontSize = transform.localScale.x + 1;
+        score = (int)(transform.localScale.x * 100) - 100;
         return base.Deserialize(packet) + usernameLength + 1;
     }
 }

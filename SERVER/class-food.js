@@ -5,8 +5,8 @@ exports.Food = class Food extends NetworkObject{
         super();
         this.classID = "FOOD";
 
-        this.position.x = this.getRandomInt(99);
-        this.position.y = this.getRandomInt(99);
+        this.position.x = this.getRandomInt(95);
+        this.position.y = this.getRandomInt(95);
 
         this.scale.x = 0.3;
         this.scale.y = 0.3;
