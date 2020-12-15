@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Pawn : NetworkObject
@@ -10,6 +11,10 @@ public class Pawn : NetworkObject
 
     public bool canPlayerControl = false;
     Vector3 velocity = new Vector3();
+
+    TextMeshPro usernameText;
+    GameObject sign;
+    private string username;
 
     private void FixedUpdate()
     {
@@ -22,6 +27,7 @@ public class Pawn : NetworkObject
 
             transform.position += new Vector3(velocity.x, velocity.y, 0) * Time.fixedDeltaTime;
             cam.transform.position =  new Vector3(transform.position.x, transform.position.y, (float)(transform.position.x - 1.5 * transform.localScale.z));
+            sign.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
             cam.orthographicSize += scaleDiff;
         }
     }
@@ -53,6 +59,15 @@ public class Pawn : NetworkObject
     private void Awake()
     {
         cam = Camera.main;
+        sign = new GameObject("player_label");        
+        sign.transform.rotation = cam.transform.rotation;
+        sign.transform.position = transform.position;
+        sign.layer = LayerMask.NameToLayer("UI");
+        usernameText = sign.AddComponent<TextMeshPro>();
+        usernameText.fontStyle = FontStyles.Normal;
+        usernameText.color = UnityEngine.Color.black;
+        usernameText.alignment = TextAlignmentOptions.Center;
+        usernameText.fontSize = transform.localScale.x;
     }
 
     public override void Serialize()
@@ -62,6 +77,11 @@ public class Pawn : NetworkObject
 
     public override int Deserialize(Buffer packet)
     {
-        return base.Deserialize(packet);
+        int usernameLength = packet.ReadInt8(38);
+        username = packet.ReadString(39, usernameLength);
+        usernameText.text = username;
+        sign.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+        usernameText.fontSize = transform.localScale.x;
+        return base.Deserialize(packet) + usernameLength + 1;
     }
 }

@@ -42,7 +42,7 @@ exports.Game = class Game {
         }
 
         if(player){
-            if(this.objs.length < this.server.PlayerCount * 100); // approx number of food items
+            if(this.objs.length < this.server.PlayerCount * 150); // approx number of food items
             {
                 var i;
                 for (i = this.objs.length; i < this.server.PlayerCount * 100; i++)

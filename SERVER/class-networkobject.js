@@ -16,15 +16,15 @@ exports.NetworkObject = class NetworkObject{
     }
     checkOverlap(other){
         if(this.aabb.compareBounds(this.aabb.bounds, other.aabb.bounds)){
-            console.log("overlap");
-            console.log("A: " + "\n\txMin: " + this.aabb.bounds.xMin
-                              + "\n\txMax: " + this.aabb.bounds.xMax
-                              + "\n\tyMin: " + this.aabb.bounds.yMin
-                              + "\n\tyMax: " + this.aabb.bounds.yMax
-                      + "B: " + "\n\txMin: " + other.aabb.bounds.xMin
-                              + "\n\txMax: " + other.aabb.bounds.xMax
-                              + "\n\tyMin: " + other.aabb.bounds.yMin
-                              + "\n\tyMax: " + other.aabb.bounds.yMax);
+            // console.log("overlap");
+            // console.log("A: " + "\n\txMin: " + this.aabb.bounds.xMin
+            //                   + "\n\txMax: " + this.aabb.bounds.xMax
+            //                   + "\n\tyMin: " + this.aabb.bounds.yMin
+            //                   + "\n\tyMax: " + this.aabb.bounds.yMax
+            //         + "\nB: " + "\n\txMin: " + other.aabb.bounds.xMin
+            //                   + "\n\txMax: " + other.aabb.bounds.xMax
+            //                   + "\n\tyMin: " + other.aabb.bounds.yMin
+            //                   + "\n\tyMax: " + other.aabb.bounds.yMax);
 
             this.scale.x += other.scale.x/5;
             this.scale.y += other.scale.y/5;

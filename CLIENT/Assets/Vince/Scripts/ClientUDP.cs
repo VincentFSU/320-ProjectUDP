@@ -21,6 +21,10 @@ public class ClientUDP : MonoBehaviour
     public ConnectGUI connectGUI;
     public ChatController chatController;
 
+    private int controlledPawnNetID = -1;
+
+    private bool ready = false;
+
     /// <summary> 
     /// Most recent ball update packet 
     /// that has been received... 
@@ -75,7 +79,7 @@ public class ClientUDP : MonoBehaviour
             UdpReceiveResult res;
             try
             {
-                res = await sockReceiving.ReceiveAsync();                
+                res = await sockReceiving.ReceiveAsync();
                 ProcessPacket(res);
             }
             catch
@@ -104,6 +108,7 @@ public class ClientUDP : MonoBehaviour
                 if (packet.Length < 5) return;
 
                 ushort networkID = packet.ReadUInt16BE(4);
+                controlledPawnNetID = networkID;
                 var obj = NetworkObject.GetObjectByNetworkID(networkID);
                 if (obj != null)
                 {
@@ -136,13 +141,17 @@ public class ClientUDP : MonoBehaviour
                 print(message);
                 break;
             case "STRT":
-                chatController.gameObject.SetActive(false);
+                if (ready)
+                {
+                    chatController.gameObject.SetActive(false);
+                }
                 break;
         }
     }
 
     public void Ready()
     {
+        ready = true;
         SendPacket(PacketBuilder.Ready());
     }
 
@@ -202,15 +211,15 @@ public class ClientUDP : MonoBehaviour
                     // lookup the object, using networkID
                     NetworkObject obj2 = NetworkObject.GetObjectByNetworkID(networkID);
                     if (obj2 == null) return;
-                    
+
                     offset += 4;
                     offset += obj2.Deserialize(packet.Slice(offset));
-                    
+
                     break;
                 case 3: // delete:
                     if (packet.Length < offset + 1) return; // do nothing 
                     networkID = packet.ReadUInt16BE(offset);
-
+                    if (networkID == controlledPawnNetID) chatController.gameObject.SetActive(true);
                     NetworkObject obj3 = NetworkObject.GetObjectByNetworkID(networkID);
                     if (obj3 == null) return;
 
@@ -231,7 +240,7 @@ public class ClientUDP : MonoBehaviour
     {
         if (sockSending == null) return;
         if (!sockSending.Client.Connected) return;
-        
+
         await sockSending.SendAsync(packet.bytes, packet.bytes.Length);
     }
     /// <summary> 

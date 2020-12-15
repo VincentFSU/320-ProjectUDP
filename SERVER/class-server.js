@@ -139,7 +139,7 @@ exports.Server = class Server {
         // TODO: refactor this nightmare
         for(let key in this.clients){
             this.clients[key].update(game);
-            if(this.clients[key].ready){
+            if(this.clients[key] != null && this.clients[key].ready == true){
                 this.readyPlayers++;
                 if(this.readyPlayers >= 1){
                     const packet = Buffer.alloc(4);
@@ -147,13 +147,15 @@ exports.Server = class Server {
                     this.sendPacketToAll(packet);
                     for(let key in this.clients){
                         this.clients[key].update(game);
-                        if(this.clients[key].ready && !this.clients[key].pawn){
-                            this.clients[key].spawnPawn(this.game);
-                            this.PlayerCount++; 
-                            const packet = Buffer.alloc(6);
-                            packet.write("PAWN", 0);
-                            packet.writeUInt16BE(this.clients[key].pawn.networkID, 4);
-                            this.sendPacketToClient(packet, this.clients[key]);
+                        if(this.clients[key] != null || this.clients[key].ready != null){ // weird bug
+                            if(this.clients[key].ready && !this.clients[key].pawn){
+                                this.clients[key].spawnPawn(this.game);
+                                this.PlayerCount++; 
+                                const packet = Buffer.alloc(6);
+                                packet.write("PAWN", 0);
+                                packet.writeUInt16BE(this.clients[key].pawn.networkID, 4);
+                                this.sendPacketToClient(packet, this.clients[key]);
+                            }
                         }
                     }
                 }
